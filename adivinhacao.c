@@ -1,52 +1,52 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define NUMERO_DE_TENTATIVAS 5
+#define NUMERO_DE_TENTATIVAS 3
 
-int main()
-{
-	printf("**********************************\n");
-	printf("Bem vindo ao Jogo de Adivinhação! \n");
-	printf("**********************************\n");
+int main() {
+    printf("************************************\n");
+    printf("* Bem vindo ao Jogo de Adivinhação *\n");
+    printf("************************************\n");
 
-	int numerosecreto = 42;
+    int chute;
+    int acertou = 0;
+    int tentativas = 1;
+    double pontos = 1000;
+    //EPOCH
+    srand(time(0));
+    int numerosecreto = rand() % 100;
 
-	int chute;
+    while(!acertou) {
 
-	for (int i = 1; i <= NUMERO_DE_TENTATIVAS; i++)
-	{
+        printf("Qual é o seu %do. chute? ", tentativas);
+        scanf("%d", &chute);
 
-		printf("Tentativa %d de %d\n", i, NUMERO_DE_TENTATIVAS);
-		printf("Qual o seu chute? \n");
+        if(chute < 0) {
+            printf("Você não pode chutar números negativos\n");
+            continue;
+        }
 
-		scanf("%d", &chute);
-		printf("Número escolhido: %d\n", chute);
+        printf("Seu %do. chute foi %d\n", tentativas, chute);
 
-		if(chute < 0) {
-			printf("Você não pode chutar números negativos\n");
-			i--;
+        acertou = chute == numerosecreto;
+        int maior = chute > numerosecreto;
 
-			continue;
-		}
+        if(acertou) {
+            printf("Parabéns! Você acertou!\n");
+        } else if(maior) {
+            printf("Seu chute foi maior do que o número secreto!\n");
+        } else {
+            printf("Seu chute foi menor do que o número secreto!\n");
+        }
 
-		int acertou = (chute == numerosecreto);
-		int maior = (chute > numerosecreto);
-		int menor = (chute < numerosecreto);
+        tentativas++;
 
-		if (acertou)
-		{
-			printf("Você acertou!\n");
-			printf("Jogue de novo, você é um bom jogador!");
+        double pontosperdidos = abs(chute - numerosecreto) / 2.0;
+        pontos = pontos - pontosperdidos;
+    }
 
-			break;
-		}
-		else if (maior)
-		{
-			printf("Seu chute foi MAIOR que o número secreto\n");
-		}
-		else
-		{
-			printf("Seu chute foi MENOR que o número secreto\n");
-		}
-	}
-	printf("Fim de jogo. \n");
+    printf("Você fez %.2f pontos", pontos);
+    printf("Obrigado por jogar!\n");
+
 }
